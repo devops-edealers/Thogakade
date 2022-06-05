@@ -22,7 +22,7 @@ public class CustomerFormController {
     public TextField txtSalary;
     public TextField txtAddress;
     public TextField txtSearch;
-    public TableView tblCustomer;
+    public TableView<CustomerTM> tblCustomer;
     public TableColumn colId;
     public TableColumn colName;
     public TableColumn colAddress;
@@ -37,6 +37,25 @@ public class CustomerFormController {
         colSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
         colOption.setCellValueFactory(new PropertyValueFactory<>("btn"));
         loadAllCustomers("");
+
+        /*listener*/
+        txtSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            loadAllCustomers(newValue);
+        });
+
+
+        tblCustomer.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+           if (newValue!=null){
+               setData(newValue);
+            }
+        });
+        /*listener*/
+    }
+
+    private void setData(CustomerTM value) {
+        txtName.setText(value.getName());
+        txtSalary.setText(String.valueOf(value.getSalary()));
+        txtAddress.setText(value.getAddress());
     }
 
     private void loadAllCustomers(String text) {
@@ -77,6 +96,7 @@ public class CustomerFormController {
         );
         try {
             if (new DatabaseAccessCode().saveCustomer(dto)) {
+                loadAllCustomers("");
                 new Alert(Alert.AlertType.CONFIRMATION, "Saved!", ButtonType.CANCEL).show();
             } else {
                 new Alert(Alert.AlertType.WARNING, " Try Again", ButtonType.OK).show();
