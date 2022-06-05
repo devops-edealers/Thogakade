@@ -47,16 +47,18 @@ public class CustomerFormController {
 
         tblCustomer.getSelectionModel().selectedItemProperty().addListener
                 ((observable, oldValue, newValue) -> {
-           if (newValue!=null){
-               setData(newValue);
-            }
-        });
+                    if (newValue != null) {
+                        setData(newValue);
+                    }
+                });
         /*listener*/
     }
 
+    private String id = "";
+
     private void setData(CustomerTM value) {
         btnSaveUpdate.setText("Update Customer");
-
+        id = value.getId();
         txtName.setText(value.getName());
         txtSalary.setText(String.valueOf(value.getSalary()));
         txtAddress.setText(value.getAddress());
@@ -96,26 +98,28 @@ public class CustomerFormController {
         clearData();
     }
 
-    public void saveCustomerOnActopn(ActionEvent actionEvent) {
-        CustomerDto dto = new CustomerDto("", txtName.getText(), txtAddress.getText(),
-                Double.parseDouble(txtSalary.getText())
-        );
-
-        if (btnSaveUpdate.getText().equalsIgnoreCase("Save Customer")){
-            try {
-                if (new DatabaseAccessCode().saveCustomer(dto)) {
-                    loadAllCustomers("");
-                    new Alert(Alert.AlertType.CONFIRMATION, "Saved!", ButtonType.CANCEL).show();
-                } else {
-                    new Alert(Alert.AlertType.WARNING, " Try Again", ButtonType.OK).show();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+    public void saveCustomerOnActopn(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        if (btnSaveUpdate.getText().equalsIgnoreCase("Save Customer")) {
+            CustomerDto dto = new CustomerDto("", txtName.getText(), txtAddress.getText(),
+                    Double.parseDouble(txtSalary.getText())
+            );
+            if (new DatabaseAccessCode().saveCustomer(dto)) {
+                loadAllCustomers("");
+                new Alert(Alert.AlertType.CONFIRMATION, "Saved!", ButtonType.CANCEL).show();
+            } else {
+                new Alert(Alert.AlertType.WARNING, " Try Again", ButtonType.OK).show();
             }
-        }else{
-            // update
+        } else {
+            if (id.length()==0)return;
+            CustomerDto dto = new CustomerDto(id, txtName.getText(), txtAddress.getText(),
+                    Double.parseDouble(txtSalary.getText())
+            );
+            if (new DatabaseAccessCode().updateCustomer(dto)) {
+                loadAllCustomers("");
+                new Alert(Alert.AlertType.CONFIRMATION, "Updated!", ButtonType.CANCEL).show();
+            } else {
+                new Alert(Alert.AlertType.WARNING, " Try Again", ButtonType.OK).show();
+            }
         }
     }
 

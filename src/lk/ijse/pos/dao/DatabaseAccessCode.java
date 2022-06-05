@@ -52,6 +52,16 @@ public class DatabaseAccessCode {
         return dtoList;
     }
 
+    public boolean updateCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
+
+        return CrudUtil.execute("UPDATE customer SET name=?, address=?, salary=? WHERE id=?",
+                dto.getName(),
+                dto.getAddress(),
+                dto.getSalary(),
+                dto.getId());
+    }
+
+
     // Customer ===========
 
 
