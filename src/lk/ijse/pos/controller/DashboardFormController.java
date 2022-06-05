@@ -5,15 +5,21 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Calendar;
 
 public class DashboardFormController {
     public Label lblTime;
+    public AnchorPane dashboardContainer;
 
     public void initialize() {
         setTime();
@@ -38,7 +44,8 @@ public class DashboardFormController {
         timeline.play();
     }
 
-    public void customerManagementOnAction(ActionEvent actionEvent) {
+    public void customerManagementOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("CustomerForm","Customer Page");
     }
 
     public void itemManagementOnAction(ActionEvent actionEvent) {
@@ -48,5 +55,13 @@ public class DashboardFormController {
     }
 
     public void placeOrderOnAction(ActionEvent actionEvent) {
+    }
+
+    private void setUi(String location, String title) throws IOException {
+        Stage stage = (Stage) dashboardContainer.getScene().getWindow();
+        stage.setScene(new Scene(FXMLLoader
+                .load(getClass().getResource("../view/"+location+".fxml"))));
+        stage.centerOnScreen();
+        stage.setTitle(title);
     }
 }
