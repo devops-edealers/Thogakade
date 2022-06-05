@@ -1,5 +1,7 @@
 package lk.ijse.pos.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.dao.DatabaseAccessCode;
 import lk.ijse.pos.dto.CustomerDto;
+import lk.ijse.pos.view.tm.CustomerTM;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -26,14 +29,23 @@ public class CustomerFormController {
     public TableColumn colOption;
     public AnchorPane customerContainer;
 
-    public void initialize(){
+    public void initialize() {
         loadAllCustomers("");
     }
-    private void loadAllCustomers(String text) {
-        try {
 
-            ArrayList<CustomerDto> dtos = new DatabaseAccessCode().searchCustomer(text);
-            System.out.println(dtos);
+    private void loadAllCustomers(String text) {
+        ObservableList<CustomerTM> tmList = FXCollections.observableArrayList();
+        try {
+            for (CustomerDto dto : new DatabaseAccessCode().searchCustomer(text)
+            ) {
+                Button btn = new Button("Delete");
+                CustomerTM tm = new CustomerTM(
+                        dto.getId(), dto.getName(), dto.getAddress(), dto.getSalary(),
+                        btn
+                );
+                tmList.add(tm);
+            }
+            tblCustomer.setItems(tmList);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
