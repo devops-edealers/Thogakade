@@ -3,6 +3,7 @@ package lk.ijse.pos.dao;
 import lk.ijse.pos.db.DatabaseConnection;
 import lk.ijse.pos.dto.CustomerDto;
 import lk.ijse.pos.dto.SystemUserDTO;
+import lk.ijse.pos.util.IdGenerator;
 
 import java.sql.*;
 
@@ -26,8 +27,7 @@ public class DatabaseAccessCode {
     // Customer ===========
 
     public boolean saveCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
-        // impl
-        // [id=?] name, address, salary
+        dto.setId(IdGenerator.getId());
         return CrudUtil.execute("INSERT INTO customer VALUES(?,?,?,?)",
                 dto.getId(),
                 dto.getName(),

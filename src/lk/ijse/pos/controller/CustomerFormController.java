@@ -3,13 +3,14 @@ package lk.ijse.pos.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.pos.dao.DatabaseAccessCode;
+import lk.ijse.pos.dto.CustomerDto;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class CustomerFormController {
     public TextField txtName;
@@ -33,6 +34,20 @@ public class CustomerFormController {
     }
 
     public void newCustomerOnAction(ActionEvent actionEvent) {
+        CustomerDto dto= new CustomerDto("",txtName.getText(),txtAddress.getText(),
+                Double.parseDouble(txtSalary.getText())
+        );
+        try {
+            if (new DatabaseAccessCode().saveCustomer(dto)){
+                new Alert(Alert.AlertType.CONFIRMATION, "Saved!", ButtonType.CANCEL).show();
+            }else{
+                new Alert(Alert.AlertType.WARNING," Try Again", ButtonType.OK).show();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void saveCustomerOnActopn(ActionEvent actionEvent) {
