@@ -28,6 +28,7 @@ public class DatabaseAccessCode {
 
     public boolean saveCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
         dto.setId(IdGenerator.getId());
+        System.out.println(dto);
         return CrudUtil.execute("INSERT INTO customer VALUES(?,?,?,?)",
                 dto.getId(),
                 dto.getName(),

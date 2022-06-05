@@ -34,6 +34,9 @@ public class CustomerFormController {
     }
 
     public void newCustomerOnAction(ActionEvent actionEvent) {
+    }
+
+    public void saveCustomerOnActopn(ActionEvent actionEvent) {
         CustomerDto dto= new CustomerDto("",txtName.getText(),txtAddress.getText(),
                 Double.parseDouble(txtSalary.getText())
         );
@@ -48,8 +51,5 @@ public class CustomerFormController {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void saveCustomerOnActopn(ActionEvent actionEvent) {
     }
 }
