@@ -6,6 +6,7 @@ import lk.ijse.pos.dto.SystemUserDTO;
 import lk.ijse.pos.util.IdGenerator;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DatabaseAccessCode {
     // system user===========
@@ -34,6 +35,21 @@ public class DatabaseAccessCode {
                 dto.getName(),
                 dto.getAddress(),
                 dto.getSalary());
+    }
+
+    public ArrayList<CustomerDto> searchData(String searchText) throws SQLException, ClassNotFoundException {
+        searchText = "%" + searchText + "%";
+        ArrayList<CustomerDto> dtoList = new ArrayList<>();
+        ResultSet set = CrudUtil.
+                execute("SELECT * FROM customer WHERE name LIKE? OR address LIKE?",
+                        searchText, searchText);
+        while (set.next()) {
+            dtoList.add(
+                    new CustomerDto(set.getString(1), set.getString(2),
+                            set.getString(3), set.getDouble(4))
+            );
+        }
+        return dtoList;
     }
 
     // Customer ===========

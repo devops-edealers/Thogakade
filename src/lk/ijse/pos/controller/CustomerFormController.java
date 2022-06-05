@@ -37,14 +37,14 @@ public class CustomerFormController {
     }
 
     public void saveCustomerOnActopn(ActionEvent actionEvent) {
-        CustomerDto dto= new CustomerDto("",txtName.getText(),txtAddress.getText(),
+        CustomerDto dto = new CustomerDto("", txtName.getText(), txtAddress.getText(),
                 Double.parseDouble(txtSalary.getText())
         );
         try {
-            if (new DatabaseAccessCode().saveCustomer(dto)){
+            if (new DatabaseAccessCode().saveCustomer(dto)) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Saved!", ButtonType.CANCEL).show();
-            }else{
-                new Alert(Alert.AlertType.WARNING," Try Again", ButtonType.OK).show();
+            } else {
+                new Alert(Alert.AlertType.WARNING, " Try Again", ButtonType.OK).show();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -52,4 +52,11 @@ public class CustomerFormController {
             throw new RuntimeException(e);
         }
     }
+
+    private void clearData() {
+        txtAddress.clear();
+        txtName.clear();
+        txtSalary.clear();
+    }
+
 }
