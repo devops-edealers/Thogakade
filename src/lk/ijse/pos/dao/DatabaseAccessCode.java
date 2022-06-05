@@ -33,7 +33,7 @@ public class DatabaseAccessCode {
                         "jdbc:mysql://127.0.0.1:3306/Thogakade",
                         "root",
                         "1234");
-        String sql ="SELECT * FROM WHERE email =? AND password=?";
+        String sql ="SELECT * FROM system_user WHERE email =? AND password=?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1,email);
         statement.setString(2,password);
