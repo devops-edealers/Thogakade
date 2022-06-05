@@ -4,13 +4,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.pos.dao.DatabaseAccessCode;
+import lk.ijse.pos.dto.SystemUserDTO;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 
 public class SignupFormController {
     public AnchorPane registerContainer;
@@ -28,5 +33,20 @@ public class SignupFormController {
     }
 
     public void registerOnAction(ActionEvent actionEvent) {
+        SystemUserDTO dto= new SystemUserDTO(txtName.getText(),txtEmail.getText().trim(),
+                        txtPassword.getText().trim());
+        try {
+            if(new DatabaseAccessCode().createSystemUser(dto)){
+                new Alert(Alert.AlertType.INFORMATION,"User Saved!",
+                        ButtonType.CLOSE).show();
+            }else{
+                new Alert(Alert.AlertType.WARNING,"Something went wring!",
+                        ButtonType.OK).show();
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
