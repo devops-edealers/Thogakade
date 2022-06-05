@@ -11,6 +11,7 @@ import lk.ijse.pos.dto.CustomerDto;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class CustomerFormController {
     public TextField txtName;
@@ -24,6 +25,22 @@ public class CustomerFormController {
     public TableColumn colSalary;
     public TableColumn colOption;
     public AnchorPane customerContainer;
+
+    public void initialize(){
+        loadAllCustomers("");
+    }
+    private void loadAllCustomers(String text) {
+        try {
+
+            ArrayList<CustomerDto> dtos = new DatabaseAccessCode().searchCustomer(text);
+            System.out.println(dtos);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void backToHomeOnAction(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage) customerContainer.getScene().getWindow();

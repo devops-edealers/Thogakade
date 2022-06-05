@@ -37,7 +37,7 @@ public class DatabaseAccessCode {
                 dto.getSalary());
     }
 
-    public ArrayList<CustomerDto> searchData(String searchText) throws SQLException, ClassNotFoundException {
+    public ArrayList<CustomerDto> searchCustomer(String searchText) throws SQLException, ClassNotFoundException {
         searchText = "%" + searchText + "%";
         ArrayList<CustomerDto> dtoList = new ArrayList<>();
         ResultSet set = CrudUtil.
