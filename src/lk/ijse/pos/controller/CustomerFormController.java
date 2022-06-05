@@ -29,6 +29,7 @@ public class CustomerFormController {
     public TableColumn colSalary;
     public TableColumn colOption;
     public AnchorPane customerContainer;
+    public Button btnSaveUpdate;
 
     public void initialize() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -44,7 +45,8 @@ public class CustomerFormController {
         });
 
 
-        tblCustomer.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        tblCustomer.getSelectionModel().selectedItemProperty().addListener
+                ((observable, oldValue, newValue) -> {
            if (newValue!=null){
                setData(newValue);
             }
@@ -53,6 +55,8 @@ public class CustomerFormController {
     }
 
     private void setData(CustomerTM value) {
+        btnSaveUpdate.setText("Update Customer");
+
         txtName.setText(value.getName());
         txtSalary.setText(String.valueOf(value.getSalary()));
         txtAddress.setText(value.getAddress());
@@ -88,23 +92,30 @@ public class CustomerFormController {
     }
 
     public void newCustomerOnAction(ActionEvent actionEvent) {
+        btnSaveUpdate.setText("Save Customer");
+        clearData();
     }
 
     public void saveCustomerOnActopn(ActionEvent actionEvent) {
         CustomerDto dto = new CustomerDto("", txtName.getText(), txtAddress.getText(),
                 Double.parseDouble(txtSalary.getText())
         );
-        try {
-            if (new DatabaseAccessCode().saveCustomer(dto)) {
-                loadAllCustomers("");
-                new Alert(Alert.AlertType.CONFIRMATION, "Saved!", ButtonType.CANCEL).show();
-            } else {
-                new Alert(Alert.AlertType.WARNING, " Try Again", ButtonType.OK).show();
+
+        if (btnSaveUpdate.getText().equalsIgnoreCase("Save Customer")){
+            try {
+                if (new DatabaseAccessCode().saveCustomer(dto)) {
+                    loadAllCustomers("");
+                    new Alert(Alert.AlertType.CONFIRMATION, "Saved!", ButtonType.CANCEL).show();
+                } else {
+                    new Alert(Alert.AlertType.WARNING, " Try Again", ButtonType.OK).show();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        }else{
+            // update
         }
     }
 
