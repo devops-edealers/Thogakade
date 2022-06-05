@@ -61,8 +61,17 @@ public class DatabaseAccessCode {
                 dto.getId());
     }
 
+    public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("DELETE FROM customer WHERE id=?", id);
+    }
 
     // Customer ===========
+
+    // Item ===========
+
+    // to be implemented
+
+    // Item ===========
 
 
 }

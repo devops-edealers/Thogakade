@@ -75,6 +75,31 @@ public class CustomerFormController {
                         btn
                 );
                 tmList.add(tm);
+                /*=======*/
+                btn.setOnAction((e)->{
+
+                    Alert alert= new Alert(Alert.AlertType.CONFIRMATION,
+                            "Are you sure whether do you want to delete this customer?",
+                            ButtonType.YES, ButtonType.NO);
+                    alert.showAndWait();
+                    if (alert.getResult()==ButtonType.YES){
+                        try {
+                            if (new DatabaseAccessCode().deleteCustomer(tm.getId())){
+                                new Alert(Alert.AlertType.INFORMATION, "Deleted",
+                                        ButtonType.OK).show();
+                                loadAllCustomers("");
+                            }
+
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        } catch (ClassNotFoundException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+
+                });
+                /*=======*/
+
             }
             tblCustomer.setItems(tmList);
 
