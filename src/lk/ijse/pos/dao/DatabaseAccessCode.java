@@ -16,7 +16,6 @@ public class DatabaseAccessCode {
         return CrudUtil.execute("INSERT INTO system_user VALUES (?,?,?)"
                 , dto.getName(), dto.getEmail(), dto.getPassword());
     }
-
     public boolean login(String email, String password) throws ClassNotFoundException, SQLException {
         ResultSet resultSet =
                 CrudUtil.execute("SELECT * FROM system_user WHERE email =? AND password=?",
