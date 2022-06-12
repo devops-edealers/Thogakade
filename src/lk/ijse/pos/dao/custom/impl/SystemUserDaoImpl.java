@@ -3,6 +3,7 @@ package lk.ijse.pos.dao.custom.impl;
 import lk.ijse.pos.dao.CrudUtil;
 import lk.ijse.pos.dao.custom.SystemUserDao;
 import lk.ijse.pos.entity.SystemUser;
+import lk.ijse.pos.util.SecurityConfig;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +13,9 @@ public class SystemUserDaoImpl implements SystemUserDao {
     @Override
     public boolean save(SystemUser systemUser) throws SQLException, ClassNotFoundException {
         return CrudUtil.execute("INSERT INTO system_user VALUES (?,?,?)"
-                , systemUser.getName(), systemUser.getEmail(), systemUser.getPassword());
+                , systemUser.getName(), systemUser.getEmail(),
+                SecurityConfig.encrypt(systemUser.getPassword(),SecurityConfig.holdingSecretKey)
+                );
     }
 
     @Override

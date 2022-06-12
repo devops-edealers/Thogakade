@@ -13,16 +13,18 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
 
-public class security {
+public class SecurityConfig {
 
     private static SecretKeySpec secretKey;
     private static byte[] key;
+
+    public final static String holdingSecretKey="abcdefghijklmnopqrstuvwxyz";
 
     public static String encrypt(final String plainPassword,
                                  final String secret){
         try{
             setKey(secret);
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             return Base64.getEncoder()
                     .encodeToString(cipher.doFinal(plainPassword.getBytes("UTF-8")));
