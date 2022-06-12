@@ -18,7 +18,7 @@ public class SecurityConfig {
     private static SecretKeySpec secretKey;
     private static byte[] key;
 
-    public final static String holdingSecretKey="abcdefghijklmnopqrstuvwxyz";
+    public final static String holdingSecretKey="abcdefghijklmnopdf";
 
     public static String decrypt(final String plainPassword,
                                  final String secret){
@@ -60,7 +60,7 @@ public class SecurityConfig {
             key = importedKey.getBytes("UTF-8");
             sha =MessageDigest.getInstance("SHA-1");
             key =sha.digest(key);
-            key = Arrays.copyOf(key,16);
+            key = Arrays.copyOf(key,32);
             secretKey= new SecretKeySpec(key,"AES");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
