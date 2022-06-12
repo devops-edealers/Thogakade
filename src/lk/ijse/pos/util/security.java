@@ -1,13 +1,38 @@
 package lk.ijse.pos.util;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Base64;
 
 public class security {
+
+    private static SecretKeySpec secretKey;
+    private static byte[] key;
+
+    public static String encrypt(final String plainPassword,
+                                 final String secret){
+        try{
+            setKey(secret);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            return Base64.getEncoder()
+                    .encodeToString(cipher.doFinal(plainPassword.getBytes("UTF-8")));
+
+        } catch (NoSuchPaddingException | BadPaddingException | UnsupportedEncodingException |
+                 IllegalBlockSizeException | InvalidKeyException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void setKey(final String importedKey){
         MessageDigest sha=null;
         try{
