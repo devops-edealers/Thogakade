@@ -1,9 +1,13 @@
 package lk.ijse.pos.dao;
 
+import lk.ijse.pos.dao.custom.impl.CustomerDaoImpl;
+import lk.ijse.pos.dao.custom.impl.ItemDaoImpl;
 import lk.ijse.pos.db.DatabaseConnection;
 import lk.ijse.pos.dto.CustomerDto;
 import lk.ijse.pos.dto.ItemDto;
 import lk.ijse.pos.dto.SystemUserDTO;
+import lk.ijse.pos.entity.Customer;
+import lk.ijse.pos.entity.Item;
 import lk.ijse.pos.util.IdGenerator;
 
 import java.sql.*;
@@ -16,6 +20,7 @@ public class DatabaseAccessCode {
         return CrudUtil.execute("INSERT INTO system_user VALUES (?,?,?)"
                 , dto.getName(), dto.getEmail(), dto.getPassword());
     }
+
     public boolean login(String email, String password) throws ClassNotFoundException, SQLException {
         ResultSet resultSet =
                 CrudUtil.execute("SELECT * FROM system_user WHERE email =? AND password=?",
@@ -28,40 +33,40 @@ public class DatabaseAccessCode {
     // Item ===========
 
     public boolean saveItem(ItemDto dto) throws SQLException, ClassNotFoundException {
-        dto.setCode(IdGenerator.getId());
-        System.out.println(dto);
-        return CrudUtil.execute("INSERT INTO Item VALUES(?,?,?,?)",
-                dto.getCode(),
-                dto.getDescription(),
-                dto.getQtyOnHand(),
-                dto.getUnitPrice());
+        return new ItemDaoImpl().saveItem(
+                new Item(dto.getCode(),
+                        dto.getDescription(),
+                        dto.getQtyOnHand(),
+                        dto.getUnitPrice())
+        );
     }
 
     public ArrayList<ItemDto> searchItem(String searchText) throws SQLException, ClassNotFoundException {
-        searchText = "%" + searchText + "%";
         ArrayList<ItemDto> dtoList = new ArrayList<>();
-        ResultSet set = CrudUtil.
-                execute("SELECT * FROM Item WHERE description LIKE?",searchText);
-        while (set.next()) {
+        for (Item i : new ItemDaoImpl().searchItems(searchText)
+        ) {
             dtoList.add(
-                    new ItemDto(set.getString(1), set.getString(2),
-                            set.getInt(3), set.getDouble(4))
+                    new ItemDto(
+                            i.getCode(), i.getDescription(), i.getQtyOnHand(), i.getUnitPrice()
+                    )
             );
         }
         return dtoList;
+
     }
 
     public boolean updateItem(ItemDto dto) throws SQLException, ClassNotFoundException {
 
-        return CrudUtil.execute("UPDATE Item SET description=?, qtyOnHand=?, unitPrice=? WHERE code=?",
-                dto.getDescription(),
-                dto.getQtyOnHand(),
-                dto.getUnitPrice(),
-                dto.getCode());
+        return new ItemDaoImpl().updateItem(
+                new Item(dto.getCode(),
+                        dto.getDescription(),
+                        dto.getQtyOnHand(),
+                        dto.getUnitPrice())
+        );
     }
 
     public boolean deleteItem(String id) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("DELETE FROM Item WHERE code=?", id);
+        return new ItemDaoImpl().deleteItem(id);
     }
 
     // Item ===========
@@ -69,41 +74,37 @@ public class DatabaseAccessCode {
     // Customer ===========
 
     public boolean saveCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
-        dto.setId(IdGenerator.getId());
-        System.out.println(dto);
-        return CrudUtil.execute("INSERT INTO customer VALUES(?,?,?,?)",
+        return new CustomerDaoImpl().saveCustomer(new Customer(
                 dto.getId(),
                 dto.getName(),
                 dto.getAddress(),
-                dto.getSalary());
+                dto.getSalary()
+        ));
     }
 
     public ArrayList<CustomerDto> searchCustomer(String searchText) throws SQLException, ClassNotFoundException {
-        searchText = "%" + searchText + "%";
         ArrayList<CustomerDto> dtoList = new ArrayList<>();
-        ResultSet set = CrudUtil.
-                execute("SELECT * FROM customer WHERE name LIKE? OR address LIKE?",
-                        searchText, searchText);
-        while (set.next()) {
-            dtoList.add(
-                    new CustomerDto(set.getString(1), set.getString(2),
-                            set.getString(3), set.getDouble(4))
-            );
+        for (Customer c : new CustomerDaoImpl().searchCustomer(searchText)
+        ) {
+            dtoList.add(new CustomerDto(
+                    c.getId(), c.getName(), c.getAddress(), c.getSalary()
+            ));
         }
         return dtoList;
     }
 
     public boolean updateCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
 
-        return CrudUtil.execute("UPDATE customer SET name=?, address=?, salary=? WHERE id=?",
+        return new CustomerDaoImpl().updateCustomer(new Customer(
+                dto.getId(),
                 dto.getName(),
                 dto.getAddress(),
-                dto.getSalary(),
-                dto.getId());
+                dto.getSalary()
+        ));
     }
 
     public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("DELETE FROM customer WHERE id=?", id);
+        return new CustomerDaoImpl().deleteCustomer(id);
     }
 
     // Customer ===========
