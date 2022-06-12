@@ -60,7 +60,7 @@ public class SecurityConfig {
             key = importedKey.getBytes("UTF-8");
             sha =MessageDigest.getInstance("SHA-1");
             key =sha.digest(key);
-            key = Arrays.copyOf(key,32);
+            key = Arrays.copyOf(key,16);
             secretKey= new SecretKeySpec(key,"AES");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);

@@ -44,9 +44,9 @@ public class SystemUserDaoImpl implements SystemUserDao {
                 CrudUtil.execute("SELECT * FROM system_user WHERE email =?",
                         email);
         if (resultSet.next()){
+
             String decryptPassword
-                    = SecurityConfig.decrypt(password, SecurityConfig.holdingSecretKey);
-            System.out.println(decryptPassword);
+                    = SecurityConfig.decrypt(resultSet.getString(3), SecurityConfig.holdingSecretKey);
             return decryptPassword.equals(password);
         }
         return false;
