@@ -4,10 +4,12 @@ import lk.ijse.pos.dao.CrudUtil;
 import lk.ijse.pos.dao.custom.OrderDao;
 import lk.ijse.pos.entity.Order;
 
+import java.sql.Array;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class OrderImpl implements OrderDao {
+public class OrderDaoImpl implements OrderDao {
     @Override
     public boolean save(Order order) throws SQLException, ClassNotFoundException {
         return CrudUtil.execute("INSERT INTO `Order` VALUES (?,?,?,?)",
@@ -31,7 +33,18 @@ public class OrderImpl implements OrderDao {
     }
 
     @Override
-    public ArrayList<Order> getAll() {
-        return null;
+    public ArrayList<Order> getAll() throws SQLException, ClassNotFoundException {
+        ArrayList<Order> list = new ArrayList<>();
+        ResultSet set = CrudUtil.execute("SELECT * FROM `Order`");
+        while (set.next()) {
+            list.add(
+                    new Order(set.getString(1),
+                            set.getString(2),
+                            set.getDouble(3),
+                            set.getString(4))
+            );
+        }
+
+        return list;
     }
 }

@@ -52,7 +52,8 @@ public class DashboardFormController {
         setUi("ItemForm","Item Page");
     }
 
-    public void orderDetailsManagementOnAction(ActionEvent actionEvent) {
+    public void orderDetailsManagementOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("OrderForm","Item Page");
     }
 
     public void placeOrderOnAction(ActionEvent actionEvent) {

@@ -2,6 +2,7 @@ package lk.ijse.pos.dao;
 
 import lk.ijse.pos.dao.custom.impl.CustomerDaoImpl;
 import lk.ijse.pos.dao.custom.impl.ItemDaoImpl;
+import lk.ijse.pos.dao.custom.impl.OrderDaoImpl;
 import lk.ijse.pos.dao.custom.impl.SystemUserDaoImpl;
 
 public class DaoFactory {
@@ -25,7 +26,7 @@ public class DaoFactory {
             case ITEM:
                 return (T) new ItemDaoImpl();
             case ORDER:
-                return null;
+                return (T) new OrderDaoImpl();
             case ORDER_DETAIL:
                 return null;
             case SYSTEM_USER:
