@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="ItemContainer" prefHeight="428.0" prefWidth="789.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.pos.controller.ItemFormController">
+   <children>
+      <Label layoutX="134.0" layoutY="15.0" text="Item Management" textFill="#0d048a">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Button layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#backToHomeOnAction" style="-fx-background-color: #2c3e50;" text="Back to home" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Separator layoutX="134.0" layoutY="49.0" prefHeight="0.0" prefWidth="641.0" />
+      <Button layoutX="671.0" layoutY="13.0" mnemonicParsing="false" onAction="#newSaveItemOnAction" style="-fx-background-color: #16a085;" text="+ new Item" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <TextField fx:id="txtDescription" layoutX="14.0" layoutY="79.0" prefHeight="25.0" prefWidth="206.0" promptText="Item Description" />
+      <TextField fx:id="txtUnitPrice" layoutX="233.0" layoutY="79.0" prefHeight="25.0" prefWidth="134.0" promptText="Unit Price" />
+      <TextField fx:id="txtQtyOnHand" layoutX="382.0" layoutY="79.0" prefHeight="25.0" prefWidth="267.0" promptText="QTY On Hand" />
+      <Button fx:id="btnSaveUpdate" layoutX="660.0" layoutY="79.0" mnemonicParsing="false" onAction="#saveItemOnActopn" prefHeight="25.0" prefWidth="115.0" style="-fx-background-color: #2c3e50;" text="Save Item" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <TextField fx:id="txtSearch" layoutX="14.0" layoutY="134.0" prefHeight="25.0" prefWidth="277.0" promptText="Search here" />
+      <TableView fx:id="tblItem" layoutX="14.0" layoutY="170.0" prefHeight="244.0" prefWidth="763.0">
+        <columns>
+          <TableColumn fx:id="colCode" prefWidth="94.0" text="Item Code" />
+          <TableColumn fx:id="colDescription" prefWidth="162.0" text="Description" />
+            <TableColumn fx:id="colUnitPrice" prefWidth="174.0" text="Unbit Price" />
+            <TableColumn fx:id="colQtyOnHand" prefWidth="203.0" text="QTY OnHand" />
+            <TableColumn fx:id="colOption" prefWidth="129.0" text="Options" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

@@ -19,3 +19,12 @@ CREATE TABLE customer
     salary  DECIMAL(10, 2) DEFAULT 0
 );
 DESCRIBE customer;
+
+CREATE TABLE Item
+(
+    code      VARCHAR(45) NOT NULL PRIMARY KEY,
+    description    VARCHAR(45) NOT NULL,
+    qtyOnHand INT,
+    unitPrice  DECIMAL(10, 2) DEFAULT 0
+);
+DESCRIBE Item;

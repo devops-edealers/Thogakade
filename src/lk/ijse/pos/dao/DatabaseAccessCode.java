@@ -2,6 +2,7 @@ package lk.ijse.pos.dao;
 
 import lk.ijse.pos.db.DatabaseConnection;
 import lk.ijse.pos.dto.CustomerDto;
+import lk.ijse.pos.dto.ItemDto;
 import lk.ijse.pos.dto.SystemUserDTO;
 import lk.ijse.pos.util.IdGenerator;
 
@@ -24,6 +25,47 @@ public class DatabaseAccessCode {
     }
 
     // system user===========
+
+    // Item ===========
+
+    public boolean saveItem(ItemDto dto) throws SQLException, ClassNotFoundException {
+        dto.setCode(IdGenerator.getId());
+        System.out.println(dto);
+        return CrudUtil.execute("INSERT INTO Item VALUES(?,?,?,?)",
+                dto.getCode(),
+                dto.getDescription(),
+                dto.getQtyOnHand(),
+                dto.getUnitPrice());
+    }
+
+    public ArrayList<ItemDto> searchItem(String searchText) throws SQLException, ClassNotFoundException {
+        searchText = "%" + searchText + "%";
+        ArrayList<ItemDto> dtoList = new ArrayList<>();
+        ResultSet set = CrudUtil.
+                execute("SELECT * FROM Item WHERE description LIKE?",searchText);
+        while (set.next()) {
+            dtoList.add(
+                    new ItemDto(set.getString(1), set.getString(2),
+                            set.getInt(3), set.getDouble(4))
+            );
+        }
+        return dtoList;
+    }
+
+    public boolean updateItem(ItemDto dto) throws SQLException, ClassNotFoundException {
+
+        return CrudUtil.execute("UPDATE Item SET description=?, qtyOnHand=?, unitPrice=? WHERE code=?",
+                dto.getDescription(),
+                dto.getQtyOnHand(),
+                dto.getUnitPrice(),
+                dto.getCode());
+    }
+
+    public boolean deleteItem(String id) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("DELETE FROM Item WHERE code=?", id);
+    }
+
+    // Item ===========
 
     // Customer ===========
 
@@ -66,12 +108,6 @@ public class DatabaseAccessCode {
     }
 
     // Customer ===========
-
-    // Item ===========
-
-    // to be implemented
-
-    // Item ===========
 
 
 }
