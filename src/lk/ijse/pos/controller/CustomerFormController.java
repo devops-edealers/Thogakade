@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.pos.bo.BoFactory;
+import lk.ijse.pos.bo.custom.CustomerBo;
 import lk.ijse.pos.dao.DatabaseAccessCode;
 import lk.ijse.pos.dto.CustomerDto;
 import lk.ijse.pos.view.tm.CustomerTM;
@@ -30,6 +32,8 @@ public class CustomerFormController {
     public TableColumn colOption;
     public AnchorPane customerContainer;
     public Button btnSaveUpdate;
+
+    private CustomerBo customerBo= BoFactory.getInstance().getDao(BoFactory.BoType.CUSTOMER);
 
     public void initialize() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -67,7 +71,7 @@ public class CustomerFormController {
     private void loadAllCustomers(String text) {
         ObservableList<CustomerTM> tmList = FXCollections.observableArrayList();
         try {
-            for (CustomerDto dto : new DatabaseAccessCode().searchCustomer(text)
+            for (CustomerDto dto : customerBo.searchCustomer(text)
             ) {
                 Button btn = new Button("Delete");
                 CustomerTM tm = new CustomerTM(
@@ -84,7 +88,7 @@ public class CustomerFormController {
                     alert.showAndWait();
                     if (alert.getResult()==ButtonType.YES){
                         try {
-                            if (new DatabaseAccessCode().deleteCustomer(tm.getId())){
+                            if (customerBo.deleteCustomer(tm.getId())){
                                 new Alert(Alert.AlertType.INFORMATION, "Deleted",
                                         ButtonType.OK).show();
                                 loadAllCustomers("");
@@ -128,7 +132,7 @@ public class CustomerFormController {
             CustomerDto dto = new CustomerDto("", txtName.getText(), txtAddress.getText(),
                     Double.parseDouble(txtSalary.getText())
             );
-            if (new DatabaseAccessCode().saveCustomer(dto)) {
+            if (customerBo.saveCustomer(dto)) {
                 loadAllCustomers("");
                 new Alert(Alert.AlertType.CONFIRMATION, "Saved!", ButtonType.CANCEL).show();
             } else {
@@ -139,7 +143,7 @@ public class CustomerFormController {
             CustomerDto dto = new CustomerDto(id, txtName.getText(), txtAddress.getText(),
                     Double.parseDouble(txtSalary.getText())
             );
-            if (new DatabaseAccessCode().updateCustomer(dto)) {
+            if (customerBo.updateCustomer(dto)) {
                 loadAllCustomers("");
                 new Alert(Alert.AlertType.CONFIRMATION, "Updated!", ButtonType.CANCEL).show();
             } else {

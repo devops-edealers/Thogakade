@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.pos.bo.BoFactory;
+import lk.ijse.pos.bo.custom.ItemBo;
 import lk.ijse.pos.dao.DatabaseAccessCode;
 import lk.ijse.pos.dto.CustomerDto;
 import lk.ijse.pos.dto.ItemDto;
@@ -31,6 +33,7 @@ public class ItemFormController {
     public TableColumn colUnitPrice;
     public TableColumn colQtyOnHand;
     public TableColumn colOption;
+    private ItemBo itemBo= BoFactory.getInstance().getDao(BoFactory.BoType.ITEM);
 
 
     public void initialize() {
@@ -68,7 +71,7 @@ public class ItemFormController {
     private void loadAllItems(String text) {
         ObservableList<ItemTm> tmList = FXCollections.observableArrayList();
         try {
-            for (ItemDto dto : new DatabaseAccessCode().searchItem(text)
+            for (ItemDto dto : itemBo.searchItem(text)
             ) {
                 Button btn = new Button("Delete");
                 ItemTm tm = new ItemTm(
@@ -85,7 +88,7 @@ public class ItemFormController {
                     alert.showAndWait();
                     if (alert.getResult()==ButtonType.YES){
                         try {
-                            if (new DatabaseAccessCode().deleteItem(tm.getCode())){
+                            if (itemBo.deleteItem(tm.getCode())){
                                 new Alert(Alert.AlertType.INFORMATION, "Deleted",
                                         ButtonType.OK).show();
                                 loadAllItems("");
@@ -116,7 +119,7 @@ public class ItemFormController {
             ItemDto dto = new ItemDto("", txtDescription.getText(),Integer.parseInt( txtQtyOnHand.getText()),
                     Double.parseDouble(txtUnitPrice.getText())
             );
-            if (new DatabaseAccessCode().saveItem(dto)) {
+            if (itemBo.saveItem(dto)) {
                 loadAllItems("");
                 new Alert(Alert.AlertType.CONFIRMATION, "Saved!", ButtonType.CANCEL).show();
             } else {
@@ -127,7 +130,7 @@ public class ItemFormController {
             ItemDto dto = new ItemDto(code, txtDescription.getText(),Integer.parseInt( txtQtyOnHand.getText()),
                     Double.parseDouble(txtUnitPrice.getText())
             );
-            if (new DatabaseAccessCode().updateItem(dto)) {
+            if (itemBo.updateItem(dto)) {
                 loadAllItems("");
                 new Alert(Alert.AlertType.CONFIRMATION, "Updated!", ButtonType.CANCEL).show();
             } else {
