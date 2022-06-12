@@ -12,30 +12,6 @@ import java.util.ArrayList;
 
 public class ItemDaoImpl implements ItemDao {
     @Override
-    public boolean saveItem(Item item) throws SQLException, ClassNotFoundException {
-        item.setCode(IdGenerator.getId());
-        return CrudUtil.execute("INSERT INTO Item VALUES(?,?,?,?)",
-                item.getCode(),
-                item.getDescription(),
-                item.getQtyOnHand(),
-                item.getUnitPrice());
-    }
-
-    @Override
-    public boolean updateItem(Item item) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("UPDATE Item SET description=?, qtyOnHand=?, unitPrice=? WHERE code=?",
-                item.getDescription(),
-                item.getQtyOnHand(),
-                item.getUnitPrice(),
-                item.getCode());
-    }
-
-    @Override
-    public boolean deleteItem(String id) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("DELETE FROM Item WHERE code=?", id);
-    }
-
-    @Override
     public ArrayList<Item> searchItems(String searchText) throws SQLException, ClassNotFoundException {
         searchText = "%" + searchText + "%";
         ArrayList<Item> dtoList = new ArrayList<>();
@@ -48,5 +24,39 @@ public class ItemDaoImpl implements ItemDao {
             );
         }
         return dtoList;
+    }
+
+    @Override
+    public boolean save(Item item) throws SQLException, ClassNotFoundException {
+        item.setCode(IdGenerator.getId());
+        return CrudUtil.execute("INSERT INTO Item VALUES(?,?,?,?)",
+                item.getCode(),
+                item.getDescription(),
+                item.getQtyOnHand(),
+                item.getUnitPrice());
+    }
+
+    @Override
+    public boolean update(Item item) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("UPDATE Item SET description=?, qtyOnHand=?, unitPrice=? WHERE code=?",
+                item.getDescription(),
+                item.getQtyOnHand(),
+                item.getUnitPrice(),
+                item.getCode());
+    }
+
+    @Override
+    public boolean delete(String s) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("DELETE FROM Item WHERE code=?", s);
+    }
+
+    @Override
+    public Item get(String s) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Item> getAll() {
+        return null;
     }
 }

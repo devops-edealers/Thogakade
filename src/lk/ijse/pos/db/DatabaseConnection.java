@@ -12,7 +12,7 @@ public class DatabaseConnection {
     private static final String PASSWORD="1234";
 
     private DatabaseConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
         connection=DriverManager.getConnection(HOST,USER,PASSWORD);
     }
     public static DatabaseConnection getInstance() throws SQLException, ClassNotFoundException {

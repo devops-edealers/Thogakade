@@ -11,29 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CustomerDaoImpl implements CustomerDao {
-    @Override
-    public boolean saveCustomer(Customer customer) throws SQLException, ClassNotFoundException {
-        customer.setId(IdGenerator.getId());
-        return CrudUtil.execute("INSERT INTO customer VALUES(?,?,?,?)",
-                customer.getId(),
-                customer.getName(),
-                customer.getAddress(),
-                customer.getSalary());
-    }
-
-    @Override
-    public boolean updateCustomer(Customer customer) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("UPDATE customer SET name=?, address=?, salary=? WHERE id=?",
-                customer.getName(),
-                customer.getAddress(),
-                customer.getSalary(),
-                customer.getId());
-    }
-
-    @Override
-    public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("DELETE FROM customer WHERE id=?", id);
-    }
 
     @Override
     public ArrayList<Customer> searchCustomer(String searchText) throws SQLException, ClassNotFoundException {
@@ -49,5 +26,39 @@ public class CustomerDaoImpl implements CustomerDao {
             );
         }
         return dtoList;
+    }
+
+    @Override
+    public boolean save(Customer customer) throws SQLException, ClassNotFoundException {
+        customer.setId(IdGenerator.getId());
+        return CrudUtil.execute("INSERT INTO customer VALUES(?,?,?,?)",
+                customer.getId(),
+                customer.getName(),
+                customer.getAddress(),
+                customer.getSalary());
+    }
+
+    @Override
+    public boolean update(Customer customer) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("UPDATE customer SET name=?, address=?, salary=? WHERE id=?",
+                customer.getName(),
+                customer.getAddress(),
+                customer.getSalary(),
+                customer.getId());
+    }
+
+    @Override
+    public boolean delete(String s) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("DELETE FROM customer WHERE id=?", s);
+    }
+
+    @Override
+    public Customer get(String s) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Customer> getAll() {
+        return null;
     }
 }

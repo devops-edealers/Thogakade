@@ -33,7 +33,7 @@ public class DatabaseAccessCode {
     // Item ===========
 
     public boolean saveItem(ItemDto dto) throws SQLException, ClassNotFoundException {
-        return new ItemDaoImpl().saveItem(
+        return new ItemDaoImpl().save(
                 new Item(dto.getCode(),
                         dto.getDescription(),
                         dto.getQtyOnHand(),
@@ -57,7 +57,7 @@ public class DatabaseAccessCode {
 
     public boolean updateItem(ItemDto dto) throws SQLException, ClassNotFoundException {
 
-        return new ItemDaoImpl().updateItem(
+        return new ItemDaoImpl().update(
                 new Item(dto.getCode(),
                         dto.getDescription(),
                         dto.getQtyOnHand(),
@@ -66,7 +66,7 @@ public class DatabaseAccessCode {
     }
 
     public boolean deleteItem(String id) throws SQLException, ClassNotFoundException {
-        return new ItemDaoImpl().deleteItem(id);
+        return new ItemDaoImpl().delete(id);
     }
 
     // Item ===========
@@ -74,7 +74,7 @@ public class DatabaseAccessCode {
     // Customer ===========
 
     public boolean saveCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
-        return new CustomerDaoImpl().saveCustomer(new Customer(
+        return new CustomerDaoImpl().save(new Customer(
                 dto.getId(),
                 dto.getName(),
                 dto.getAddress(),
@@ -95,7 +95,7 @@ public class DatabaseAccessCode {
 
     public boolean updateCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
 
-        return new CustomerDaoImpl().updateCustomer(new Customer(
+        return new CustomerDaoImpl().update(new Customer(
                 dto.getId(),
                 dto.getName(),
                 dto.getAddress(),
@@ -104,7 +104,7 @@ public class DatabaseAccessCode {
     }
 
     public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
-        return new CustomerDaoImpl().deleteCustomer(id);
+        return new CustomerDaoImpl().delete(id);
     }
 
     // Customer ===========
