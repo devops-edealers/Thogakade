@@ -1,5 +1,7 @@
 package lk.ijse.pos.dao;
 
+import lk.ijse.pos.bo.custom.impl.CustomerBoImpl;
+import lk.ijse.pos.bo.custom.impl.ItemBoImpl;
 import lk.ijse.pos.dao.custom.CustomerDao;
 import lk.ijse.pos.dao.custom.ItemDao;
 import lk.ijse.pos.dao.custom.impl.CustomerDaoImpl;
@@ -17,8 +19,6 @@ import java.util.ArrayList;
 
 public class DatabaseAccessCode {
 
-    private CustomerDao customerDao=DaoFactory.getInstance().getDao(DaoFactory.DaoType.CUSTOMER);
-    private ItemDao itemDao=DaoFactory.getInstance().getDao(DaoFactory.DaoType.ITEM);
 
     // system user===========
     public boolean createSystemUser(SystemUserDTO dto)
@@ -39,40 +39,21 @@ public class DatabaseAccessCode {
     // Item ===========
 
     public boolean saveItem(ItemDto dto) throws SQLException, ClassNotFoundException {
-        return itemDao.save(
-                new Item(dto.getCode(),
-                        dto.getDescription(),
-                        dto.getQtyOnHand(),
-                        dto.getUnitPrice())
-        );
+        return new ItemBoImpl().saveItem(dto);
     }
 
     public ArrayList<ItemDto> searchItem(String searchText) throws SQLException, ClassNotFoundException {
-        ArrayList<ItemDto> dtoList = new ArrayList<>();
-        for (Item i : itemDao.searchItems(searchText)
-        ) {
-            dtoList.add(
-                    new ItemDto(
-                            i.getCode(), i.getDescription(), i.getQtyOnHand(), i.getUnitPrice()
-                    )
-            );
-        }
-        return dtoList;
-
+        return new ItemBoImpl().searchItem(searchText);
     }
 
     public boolean updateItem(ItemDto dto) throws SQLException, ClassNotFoundException {
 
-        return itemDao.update(
-                new Item(dto.getCode(),
-                        dto.getDescription(),
-                        dto.getQtyOnHand(),
-                        dto.getUnitPrice())
-        );
+        return new ItemBoImpl().updateItem(dto);
+
     }
 
     public boolean deleteItem(String id) throws SQLException, ClassNotFoundException {
-        return itemDao.delete(id);
+        return new ItemBoImpl().deleteItem(id);
     }
 
     // Item ===========
@@ -80,37 +61,21 @@ public class DatabaseAccessCode {
     // Customer ===========
 
     public boolean saveCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
-        return customerDao.save(new Customer(
-                dto.getId(),
-                dto.getName(),
-                dto.getAddress(),
-                dto.getSalary()
-        ));
+        return new CustomerBoImpl().saveCustomer(dto);
+
     }
 
     public ArrayList<CustomerDto> searchCustomer(String searchText) throws SQLException, ClassNotFoundException {
-        ArrayList<CustomerDto> dtoList = new ArrayList<>();
-        for (Customer c : customerDao.searchCustomer(searchText)
-        ) {
-            dtoList.add(new CustomerDto(
-                    c.getId(), c.getName(), c.getAddress(), c.getSalary()
-            ));
-        }
-        return dtoList;
+        return new CustomerBoImpl().searchCustomer(searchText);
     }
 
     public boolean updateCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
+        return new CustomerBoImpl().updateCustomer(dto);
 
-        return customerDao.update(new Customer(
-                dto.getId(),
-                dto.getName(),
-                dto.getAddress(),
-                dto.getSalary()
-        ));
     }
 
     public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
-        return customerDao.delete(id);
+        return new CustomerBoImpl().deleteCustomer(id);
     }
 
     // Customer ===========
