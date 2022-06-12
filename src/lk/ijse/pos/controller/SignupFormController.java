@@ -10,7 +10,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.pos.dao.DatabaseAccessCode;
+import lk.ijse.pos.bo.BoFactory;
+import lk.ijse.pos.bo.custom.SystemUserBo;
 import lk.ijse.pos.dto.SystemUserDTO;
 
 import java.io.IOException;
@@ -22,6 +23,8 @@ public class SignupFormController {
     public TextField txtName;
     public PasswordField txtPassword;
     public TextField txtEmail;
+
+    private SystemUserBo systemUserBo= BoFactory.getInstance().getBo(BoFactory.BoType.SYSTEM_USER);
 
     public void alreadyHavAnOnAction(ActionEvent actionEvent) throws IOException {
         URL resource = getClass().getResource("../view/LoginForm.fxml");
@@ -36,7 +39,7 @@ public class SignupFormController {
         SystemUserDTO dto= new SystemUserDTO(txtName.getText(),txtEmail.getText().trim(),
                         txtPassword.getText().trim());
         try {
-            if(new DatabaseAccessCode().createSystemUser(dto)){
+            if(systemUserBo.registerUser(dto)){
                 new Alert(Alert.AlertType.INFORMATION,"User Saved!",
                         ButtonType.CLOSE).show();
             }else{

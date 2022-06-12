@@ -1,24 +1,25 @@
 package lk.ijse.pos.bo;
 
-import lk.ijse.pos.bo.custom.ItemBo;
 import lk.ijse.pos.bo.custom.impl.CustomerBoImpl;
 import lk.ijse.pos.bo.custom.impl.ItemBoImpl;
-import lk.ijse.pos.dao.DaoFactory;
-import lk.ijse.pos.dao.custom.impl.CustomerDaoImpl;
-import lk.ijse.pos.dao.custom.impl.ItemDaoImpl;
+import lk.ijse.pos.bo.custom.impl.SystemUserBoImpl;
 
 public class BoFactory {
     private static BoFactory boFactory;
-    private BoFactory(){}
 
-    public enum BoType{
-        CUSTOMER,ITEM,ORDER,ORDER_DETAIL
+    private BoFactory() {
     }
-    public static BoFactory getInstance(){
-        return ((boFactory==null)? new BoFactory():boFactory);
+
+    public enum BoType {
+        CUSTOMER, ITEM, ORDER, ORDER_DETAIL, SYSTEM_USER
     }
-    public <T> T getDao(BoType type){
-        switch (type){
+
+    public static BoFactory getInstance() {
+        return ((boFactory == null) ? new BoFactory() : boFactory);
+    }
+
+    public <T> T getBo(BoType type) {
+        switch (type) {
             case CUSTOMER:
                 return (T) new CustomerBoImpl();
             case ITEM:
@@ -27,6 +28,8 @@ public class BoFactory {
                 return null;
             case ORDER_DETAIL:
                 return null;
+            case SYSTEM_USER:
+                return (T) new SystemUserBoImpl();
             default:
                 return null;
         }

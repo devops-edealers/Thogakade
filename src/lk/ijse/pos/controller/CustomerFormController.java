@@ -11,13 +11,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.bo.BoFactory;
 import lk.ijse.pos.bo.custom.CustomerBo;
-import lk.ijse.pos.dao.DatabaseAccessCode;
 import lk.ijse.pos.dto.CustomerDto;
 import lk.ijse.pos.view.tm.CustomerTM;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class CustomerFormController {
     public TextField txtName;
@@ -33,7 +31,7 @@ public class CustomerFormController {
     public AnchorPane customerContainer;
     public Button btnSaveUpdate;
 
-    private CustomerBo customerBo= BoFactory.getInstance().getDao(BoFactory.BoType.CUSTOMER);
+    private CustomerBo customerBo= BoFactory.getInstance().getBo(BoFactory.BoType.CUSTOMER);
 
     public void initialize() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));

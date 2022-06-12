@@ -11,10 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.bo.BoFactory;
 import lk.ijse.pos.bo.custom.ItemBo;
-import lk.ijse.pos.dao.DatabaseAccessCode;
-import lk.ijse.pos.dto.CustomerDto;
 import lk.ijse.pos.dto.ItemDto;
-import lk.ijse.pos.view.tm.CustomerTM;
 import lk.ijse.pos.view.tm.ItemTm;
 
 import java.io.IOException;
@@ -33,7 +30,7 @@ public class ItemFormController {
     public TableColumn colUnitPrice;
     public TableColumn colQtyOnHand;
     public TableColumn colOption;
-    private ItemBo itemBo= BoFactory.getInstance().getDao(BoFactory.BoType.ITEM);
+    private ItemBo itemBo= BoFactory.getInstance().getBo(BoFactory.BoType.ITEM);
 
 
     public void initialize() {
