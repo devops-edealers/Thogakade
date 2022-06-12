@@ -20,6 +20,25 @@ public class SecurityConfig {
 
     public final static String holdingSecretKey="abcdefghijklmnopqrstuvwxyz";
 
+    public static String decrypt(final String plainPassword,
+                                 final String secret){
+        try{
+            setKey(secret);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            return new String(
+                    cipher.doFinal(
+                            Base64.getDecoder()
+                                    .decode(plainPassword)
+                    )
+            );
+
+        } catch (NoSuchPaddingException | BadPaddingException |
+                 IllegalBlockSizeException | InvalidKeyException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static String encrypt(final String plainPassword,
                                  final String secret){
         try{

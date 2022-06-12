@@ -41,8 +41,14 @@ public class SystemUserDaoImpl implements SystemUserDao {
     @Override
     public boolean login(String email, String password) throws SQLException, ClassNotFoundException {
         ResultSet resultSet =
-                CrudUtil.execute("SELECT * FROM system_user WHERE email =? AND password=?",
-                        email, password);
-        return resultSet.next();
+                CrudUtil.execute("SELECT * FROM system_user WHERE email =?",
+                        email);
+        if (resultSet.next()){
+            String decryptPassword
+                    = SecurityConfig.decrypt(password, SecurityConfig.holdingSecretKey);
+            System.out.println(decryptPassword);
+            return decryptPassword.equals(password);
+        }
+        return false;
     }
 }
