@@ -2,19 +2,32 @@ package lk.ijse.pos.dao.custom.impl;
 
 import lk.ijse.pos.dao.CrudUtil;
 import lk.ijse.pos.dao.custom.OrderDao;
+import lk.ijse.pos.db.HibernateUtil;
+import lk.ijse.pos.entity.Customer;
 import lk.ijse.pos.entity.Order;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 
 import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderDaoImpl implements OrderDao {
     @Override
     public boolean save(Order order) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("INSERT INTO `Order` VALUES (?,?,?,?)",
-                order.getId(), order.getDate(),
-                order.getCost(), order.getCustomer());
+
+        try (Session session = new HibernateUtil().getSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.save(order);
+            transaction.commit();
+            return true;
+        }// try-resource
     }
 
     @Override
@@ -33,17 +46,10 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public ArrayList<Order> getAll() throws SQLException, ClassNotFoundException {
-        ArrayList<Order> list = new ArrayList<>();
-       /* ResultSet set = CrudUtil.execute("SELECT * FROM `Order`");
-        while (set.next()) {
-            list.add(
-                    new Order(set.getString(1),
-                            set.getString(2),
-                            set.getDouble(3),
-                            set.getString(4))
-            );
-        }*/
-        return list;
+    public List<Order> getAll() throws SQLException, ClassNotFoundException {
+        try (Session session = new HibernateUtil().getSession()) {
+            Query query = session.createQuery("FROM Orders");
+            return query.list();
+        }// try-resource
     }
 }
