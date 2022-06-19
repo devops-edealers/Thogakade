@@ -2,52 +2,61 @@ package lk.ijse.pos.dao.custom.impl;
 
 import lk.ijse.pos.dao.CrudUtil;
 import lk.ijse.pos.dao.custom.ItemDao;
+import lk.ijse.pos.db.HibernateUtil;
 import lk.ijse.pos.dto.ItemDto;
+import lk.ijse.pos.entity.Customer;
 import lk.ijse.pos.entity.Item;
 import lk.ijse.pos.util.IdGenerator;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ItemDaoImpl implements ItemDao {
     @Override
-    public ArrayList<Item> searchItems(String searchText) throws SQLException, ClassNotFoundException {
-        searchText = "%" + searchText + "%";
-        ArrayList<Item> dtoList = new ArrayList<>();
-        ResultSet set = CrudUtil.
-                execute("SELECT * FROM Item WHERE description LIKE?",searchText);
-        while (set.next()) {
-            dtoList.add(
-                    new Item(set.getString(1), set.getString(2),
-                            set.getInt(3), set.getDouble(4))
-            );
-        }
-        return dtoList;
+    public List<Item> searchItems(String searchText) throws SQLException, ClassNotFoundException {
+        try (Session session = new HibernateUtil().getSession()) {
+            Criteria criteria = session.createCriteria(Item.class);
+            criteria.add(Restrictions.like("description",searchText, MatchMode.START));
+            return criteria.list();
+        }// try-resource
     }
 
     @Override
     public boolean save(Item item) throws SQLException, ClassNotFoundException {
         item.setCode(IdGenerator.getId());
-        return CrudUtil.execute("INSERT INTO Item VALUES(?,?,?,?)",
-                item.getCode(),
-                item.getDescription(),
-                item.getQtyOnHand(),
-                item.getUnitPrice());
+        try (Session session = new HibernateUtil().getSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.save(item);
+            transaction.commit();
+            return true;
+        }// try-resource
     }
 
     @Override
     public boolean update(Item item) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("UPDATE Item SET description=?, qtyOnHand=?, unitPrice=? WHERE code=?",
-                item.getDescription(),
-                item.getQtyOnHand(),
-                item.getUnitPrice(),
-                item.getCode());
+        try (Session session = new HibernateUtil().getSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.update(item);
+            transaction.commit();
+            return true;
+        }// try-resource
     }
 
     @Override
     public boolean delete(String s) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("DELETE FROM Item WHERE code=?", s);
+        try (Session session = new HibernateUtil().getSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.delete(session.find(Item.class, s));
+            transaction.commit();
+            return true;
+        }// try-resource
     }
 
     @Override

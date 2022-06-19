@@ -5,6 +5,7 @@ import lk.ijse.pos.entity.Item;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ItemDao extends CrudDao<Item, String> {
    /* public boolean saveItem(Item item) throws SQLException, ClassNotFoundException;
@@ -13,5 +14,5 @@ public interface ItemDao extends CrudDao<Item, String> {
 
     public boolean deleteItem(String id) throws SQLException, ClassNotFoundException;
 */
-    public ArrayList<Item> searchItems(String searchText) throws SQLException, ClassNotFoundException;
+    public List<Item> searchItems(String searchText) throws SQLException, ClassNotFoundException;
 }
