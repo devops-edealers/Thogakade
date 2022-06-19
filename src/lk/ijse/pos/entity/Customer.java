@@ -1,10 +1,22 @@
 package lk.ijse.pos.entity;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.Set;
+
+@Entity
 public class Customer {
+    @Id
     private String id;
     private String name;
     private String address;
     private double salary;
+
+    @OneToMany(cascade = CascadeType.ALL,
+    mappedBy = "customer")
+    private Set<Order> orders;
 
     public Customer() {
     }

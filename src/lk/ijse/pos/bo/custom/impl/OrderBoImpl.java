@@ -22,7 +22,7 @@ public class OrderBoImpl implements OrderBo {
         for (Order o : orderDao.getAll()
         ) {
             list.add(new OrderDto(
-                    o.getId(), o.getDate(), o.getCost(), o.getCustomer()
+                    o.getId(), o.getDate(), o.getCost(), o.getCustomer().getId()
             ));
         }
         return list;

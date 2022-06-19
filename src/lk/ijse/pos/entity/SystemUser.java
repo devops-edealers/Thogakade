@@ -1,8 +1,15 @@
 package lk.ijse.pos.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class SystemUser {
 
     private String name;
+    @Id
+    @Column(unique = true)
     private String email;
     private String password;
 

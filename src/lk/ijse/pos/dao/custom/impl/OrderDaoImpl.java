@@ -35,7 +35,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public ArrayList<Order> getAll() throws SQLException, ClassNotFoundException {
         ArrayList<Order> list = new ArrayList<>();
-        ResultSet set = CrudUtil.execute("SELECT * FROM `Order`");
+       /* ResultSet set = CrudUtil.execute("SELECT * FROM `Order`");
         while (set.next()) {
             list.add(
                     new Order(set.getString(1),
@@ -43,8 +43,7 @@ public class OrderDaoImpl implements OrderDao {
                             set.getDouble(3),
                             set.getString(4))
             );
-        }
-
+        }*/
         return list;
     }
 }

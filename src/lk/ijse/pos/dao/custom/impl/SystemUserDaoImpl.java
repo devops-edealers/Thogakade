@@ -2,8 +2,11 @@ package lk.ijse.pos.dao.custom.impl;
 
 import lk.ijse.pos.dao.CrudUtil;
 import lk.ijse.pos.dao.custom.SystemUserDao;
+import lk.ijse.pos.db.HibernateUtil;
 import lk.ijse.pos.entity.SystemUser;
 import lk.ijse.pos.util.SecurityConfig;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,10 +15,15 @@ import java.util.ArrayList;
 public class SystemUserDaoImpl implements SystemUserDao {
     @Override
     public boolean save(SystemUser systemUser) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("INSERT INTO system_user VALUES (?,?,?)"
-                , systemUser.getName(), systemUser.getEmail(),
-                SecurityConfig.encrypt(systemUser.getPassword(),SecurityConfig.holdingSecretKey)
-                );
+       try(Session session = new HibernateUtil().getSession()){
+           Transaction transaction = session.beginTransaction();
+           systemUser.setPassword
+                   (SecurityConfig.encrypt(systemUser.getPassword(),
+                           SecurityConfig.holdingSecretKey));
+           session.save(systemUser);
+           transaction.commit();
+           return true;
+       }// try-resource
     }
 
     @Override
@@ -40,15 +48,17 @@ public class SystemUserDaoImpl implements SystemUserDao {
 
     @Override
     public boolean login(String email, String password) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet =
-                CrudUtil.execute("SELECT * FROM system_user WHERE email =?",
-                        email);
-        if (resultSet.next()){
 
-            String decryptPassword
-                    = SecurityConfig.decrypt(resultSet.getString(3), SecurityConfig.holdingSecretKey);
-            return decryptPassword.equals(password);
-        }
-        return false;
+        try(Session session = new HibernateUtil().getSession()){
+            SystemUser systemUser = session.find(SystemUser.class, email);
+            if (systemUser!=null){
+                String decryptPassword
+                        = SecurityConfig.decrypt(systemUser.getPassword(), SecurityConfig.holdingSecretKey);
+                return decryptPassword.equals(password);
+            }else{
+                return false;
+            }
+        }// try-resource
+
     }
 }

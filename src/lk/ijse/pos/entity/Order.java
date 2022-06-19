@@ -1,15 +1,25 @@
 package lk.ijse.pos.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity(name = "Orders")
 public class Order {
+    @Id
     private String id;
     private String date;
     private double cost;
-    private String customer;
+    @ManyToOne
+    @JoinColumn(name = "customer_id",
+            referencedColumnName = "id")
+    private Customer customer;
 
     public Order() {
     }
 
-    public Order(String id, String date, double cost, String customer) {
+    public Order(String id, String date, double cost, Customer customer) {
         this.id = id;
         this.date = date;
         this.cost = cost;
@@ -40,11 +50,11 @@ public class Order {
         this.cost = cost;
     }
 
-    public String getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(String customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
